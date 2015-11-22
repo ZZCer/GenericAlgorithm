@@ -32,7 +32,11 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     @Override
     public GenericSolver<T> clone() throws CloneNotSupportedException {
-        return (GenericSolver<T>) super.clone();
+        Object solver = super.clone();
+        if (solver instanceof GenericSolver) {
+            return (GenericSolver<T>) solver;
+        }
+        return null;
     }
 
     public abstract double getFitness(Candidate candidate);
@@ -67,7 +71,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
         while (!canTerminate() && gen < generation) {
             evolve();
             candidate = getBestCandidate();
-            System.out.println("[" + Thread.currentThread().getId() + "] \t"+ ++gen + "\t " + candidate.getFitness());
+            System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
         }
         return candidate;
     }
@@ -102,30 +106,28 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
         int size = candidatesSize;
         List<Candidate> afterCross = new ArrayList<>();
         List<Double> fitness = getCurrentFitness(nextGeneration);
-        IntStream.range(0, size / 2 + 1).forEach(i ->
-                {
-                    List<Candidate> cross = roulette(nextGeneration, fitness, 2);
-                    if (Math.random() > crossoverChance) {
-                        afterCross.addAll(cross);
+        while (afterCross.size() < size) {
+            List<Candidate> cross = roulette(nextGeneration, fitness, 2);
+            if (Math.random() > crossoverChance) {
+                afterCross.addAll(cross);
+            } else {
+                int times = 0;
+                while (true) {
+                    List<Candidate> crossoverResult = crossover(cross.get(0), cross.get(1));
+                    if (crossoverResult != null) {
+                        crossoverResult.forEach(this::mutation);
+                        afterCross.addAll(crossoverResult);
+                        break;
                     } else {
-                        int times = 0;
-                        while (true) {
-                            List<Candidate> crossoverResult = crossover(cross.get(0), cross.get(1));
-                            if (crossoverResult != null) {
-                                crossoverResult.forEach(this::mutation);
-                                afterCross.addAll(crossoverResult);
-                                break;
-                            } else {
-                                times++;
-                            }
-                            if (times > crossoverLimit) {
-                                afterCross.addAll(cross);
-                                break;
-                            }
-                        }
+                        times++;
+                    }
+                    if (times > crossoverLimit) {
+                        afterCross.addAll(cross);
+                        break;
                     }
                 }
-        );
+            }
+        }
         nextGeneration.clear();
         nextGeneration.addAll(afterCross.subList(0, size));
     }

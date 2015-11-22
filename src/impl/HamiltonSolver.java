@@ -2,7 +2,6 @@ package impl;
 
 import core.GenericSolver;
 
-import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -13,11 +12,11 @@ import java.util.stream.IntStream;
  */
 public class HamiltonSolver extends GenericSolver<Integer> {
 
-    private Hamilton hamilton;
-
     static {
         System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
     }
+
+    private Hamilton hamilton;
 
     public HamiltonSolver(Hamilton hamilton, int candidatesSize, double eliteLimit, double mutationChance, double crossoverChance) {
         super(candidatesSize, hamilton.TOTAL_VERTEXES, 1, eliteLimit, mutationChance, crossoverChance);
@@ -29,26 +28,48 @@ public class HamiltonSolver extends GenericSolver<Integer> {
         return hamilton.fitness(candidate);
     }
 
+    private int findNext(int current, Candidate candidate, boolean[] usedMap) {
+        int nxt = current + 1;
+        while (true){
+            if (nxt >= candidateLength) {
+                nxt = 0;
+            }
+            if (usedMap[candidate.get(nxt)]) {
+                nxt++;
+            } else  {
+                break;
+            }
+        }
+        return nxt;
+    }
+
     @Override
     protected List<Candidate> crossover(Candidate a, Candidate b) {
-        Candidate newA = new Candidate(a);
-        Candidate newB = new Candidate(b);
-        int offsetX = (int) (Math.random() * candidateLength);
-        int offsetY = (int) (Math.random() * candidateLength);
-        offsetX = offsetX == 0 ? 1 : offsetX;
-        offsetY = offsetY == 0 ? 1 : offsetY;
-        IntStream.range(offsetX, offsetY)
-                .forEach(i -> {
-                    int s = newA.get(i);
-                    int e = newB.get(i);
-                    if (s != e) {
-                        Collections.swap(newA, i, newA.indexOf(e));
-                        Collections.swap(newB, i, newB.indexOf(s));
-                    }
-                });
-        newA.refreshFitness();
-        newB.refreshFitness();
-        return Arrays.asList(newA, newB);
+        Candidate newCandidate = new Candidate();
+        newCandidate.add(hamilton.START_INDEX);
+        int last = hamilton.START_INDEX;
+        boolean[] used = new boolean[candidateLength];
+        used[hamilton.START_INDEX] = true;
+        int aCur = 0, aNxt, bCur = 0, bNxt;
+        while (newCandidate.size() < candidateLength) {
+            aNxt = findNext(aCur, a, used);
+            bNxt = findNext(bCur, b, used);
+            double aCost = hamilton.getPath(last, a.get(aNxt));
+            double bCost = hamilton.getPath(last, b.get(bNxt));
+            if (aCost < bCost) {
+                last = a.get(aNxt);
+                bCur = b.indexOf(last);
+                aCur = aNxt;
+            } else {
+                last = b.get(bNxt);
+                aCur = a.indexOf(last);
+                bCur = bNxt;
+            }
+            used[last] = true;
+            newCandidate.add(last);
+        }
+        newCandidate.refreshFitness();
+        return Collections.singletonList(newCandidate);
     }
 
     @Override

@@ -45,7 +45,6 @@ public class MultiExecSolver<T> implements Solver {
             return s.getCandidatesSorted().subList(0, s.candidatesSize / solverPool.size());
         }).forEach(candidates::addAll);
         mainSolver.setCandidates(candidates);
-        mainSolver.eliteLimit = 0.01;
         mainSolver.solve();
     }
 
