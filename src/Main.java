@@ -1,3 +1,4 @@
+import wrapper.HamiltonWrapper;
 import wrapper.KnapsackWrapper;
 import wrapper.ThreeSatWrapper;
 
@@ -8,7 +9,8 @@ public class Main {
 
     public static void main(String[] args) throws IOException {
         // KnapsackWrapper wrapper = new KnapsackWrapper(new File("backpack_input.txt"));
-        ThreeSatWrapper wrapper = new ThreeSatWrapper(new File("3sat_input.txt"));
+        // ThreeSatWrapper wrapper = new ThreeSatWrapper(new File("3sat_input.txt"));
+        HamiltonWrapper wrapper = new HamiltonWrapper(new File("travel_input.txt"));
         wrapper.solve();
     }
 }

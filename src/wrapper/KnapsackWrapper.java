@@ -25,7 +25,7 @@ public class KnapsackWrapper {
         double maxWeight = scanner.nextDouble();
         int objCount = scanner.nextInt();
         KnapsackSolver.Knapsack knapsack = new KnapsackSolver.Knapsack(maxWeight);
-        IntStream.range(0, objCount).forEach(i -> knapsack.add(i, scanner.nextDouble(), scanner.nextDouble()));
+        IntStream.range(0, objCount).forEachOrdered(i -> knapsack.add(i, scanner.nextDouble(), scanner.nextDouble()));
         return knapsack;
     }
 

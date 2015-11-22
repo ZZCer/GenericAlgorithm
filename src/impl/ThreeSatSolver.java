@@ -77,8 +77,7 @@ public class ThreeSatSolver extends GenericSolver<Boolean> {
         }
 
         public double fitness(Candidate candidate) {
-            return statements.stream()
-                    .parallel()
+            return statements.parallelStream()
                     .filter(s -> s.stream()
                             .anyMatch(i -> candidate.get(Math.abs(i) - START_INDEX) == i > 0))
                     .count();

@@ -2,6 +2,7 @@ package impl;
 
 import core.GenericSolver;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.IntStream;
@@ -13,6 +14,10 @@ import java.util.stream.IntStream;
 public class HamiltonSolver extends GenericSolver<Integer> {
 
     private Hamilton hamilton;
+
+    static {
+        System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
+    }
 
     public HamiltonSolver(Hamilton hamilton, int candidatesSize, double eliteLimit, double mutationChance, double crossoverChance) {
         super(candidatesSize, hamilton.TOTAL_VERTEXES, 1, eliteLimit, mutationChance, crossoverChance);
@@ -28,18 +33,31 @@ public class HamiltonSolver extends GenericSolver<Integer> {
     protected List<Candidate> crossover(Candidate a, Candidate b) {
         Candidate newA = new Candidate(a);
         Candidate newB = new Candidate(b);
+        int offsetX = (int) (Math.random() * candidateLength);
+        int offsetY = (int) (Math.random() * candidateLength);
+        offsetX = offsetX == 0 ? 1 : offsetX;
+        offsetY = offsetY == 0 ? 1 : offsetY;
+        IntStream.range(offsetX, offsetY)
+                .forEach(i -> {
+                    int s = newA.get(i);
+                    int e = newB.get(i);
+                    if (s != e) {
+                        Collections.swap(newA, i, newA.indexOf(e));
+                        Collections.swap(newB, i, newB.indexOf(s));
+                    }
+                });
         newA.refreshFitness();
         newB.refreshFitness();
-        return null;
+        return Arrays.asList(newA, newB);
     }
 
     @Override
     protected void randomFlip(Candidate a) {
         int flipIndexA = (int) (Math.random() * a.size());
         int flipIndexB = (int) (Math.random() * a.size());
-        int swap = a.get(flipIndexA);
-        a.set(flipIndexA, a.get(flipIndexB));
-        a.set(flipIndexB, swap);
+        flipIndexA = flipIndexA == 0 ? 1 : flipIndexA;
+        flipIndexB = flipIndexB == 0 ? 1 : flipIndexB;
+        Collections.swap(a, flipIndexA, flipIndexB);
         a.refreshFitness();
     }
 
@@ -51,8 +69,9 @@ public class HamiltonSolver extends GenericSolver<Integer> {
     @Override
     protected Candidate randomValidCandidate() {
         Candidate candidate = new Candidate();
-        IntStream.range(hamilton.START_INDEX, hamilton.TOTAL_VERTEXES + hamilton.START_INDEX).forEach(candidate::add);
+        IntStream.range(hamilton.START_INDEX + 1, hamilton.TOTAL_VERTEXES + hamilton.START_INDEX).forEach(candidate::add);
         Collections.shuffle(candidate);
+        candidate.add(0, hamilton.START_INDEX);
         candidate.refreshFitness();
         return candidate;
     }
