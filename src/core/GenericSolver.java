@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/15.
  */
-public abstract class GenericSolver<T> {
+public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     protected final int candidatesSize;
     protected final int candidateLength;
@@ -30,6 +30,11 @@ public abstract class GenericSolver<T> {
         this.crossoverChance = crossoverChance;
     }
 
+    @Override
+    public GenericSolver<T> clone() throws CloneNotSupportedException {
+        return (GenericSolver<T>) super.clone();
+    }
+
     public abstract double getFitness(Candidate candidate);
 
     protected abstract List<Candidate> crossover(Candidate a, Candidate b);
@@ -46,16 +51,29 @@ public abstract class GenericSolver<T> {
         return fitness;
     }
 
-    public Candidate solve() {
-        initiate();
+    void setCandidates(List<Candidate> candidates) {
+        this.candidates = candidates;
+    }
+
+    List<Candidate> getCandidatesSorted() {
+        List<Candidate> list = new ArrayList<>(candidates);
+        Collections.sort(list, (a, b) -> (int) (b.getFitness() - a.getFitness()));
+        return list;
+    }
+
+    Candidate solveUntil(int generation) {
         Candidate candidate = null;
         int gen = 0;
-        while (!canTerminate()) {
+        while (!canTerminate() && gen < generation) {
             evolve();
             candidate = getBestCandidate();
-            System.out.println(++gen + " " + candidate.getFitness());
+            System.out.println("[" + Thread.currentThread().getId() + "] \t"+ ++gen + "\t " + candidate.getFitness());
         }
         return candidate;
+    }
+
+    public void solve() {
+        solveUntil(Integer.MAX_VALUE);
     }
 
     protected Candidate getBestCandidate() {
@@ -70,7 +88,7 @@ public abstract class GenericSolver<T> {
         }
     }
 
-    protected void initiate() {
+    public void initiate() {
         List<Candidate> candidates = new ArrayList<>();
         IntStream.range(0, candidatesSize).forEach(i -> candidates.add(i, randomValidCandidate()));
         this.candidates = candidates;

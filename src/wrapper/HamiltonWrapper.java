@@ -1,5 +1,7 @@
 package wrapper;
 
+import core.MultiExecSolver;
+import core.Solver;
 import impl.HamiltonSolver;
 
 import java.io.File;
@@ -12,11 +14,11 @@ import java.util.Scanner;
  */
 public class HamiltonWrapper {
 
-    private HamiltonSolver solver;
+    private Solver solver;
 
     public HamiltonWrapper(File file) throws FileNotFoundException {
         HamiltonSolver.Hamilton hamilton = readFromFile(file);
-        solver = new HamiltonSolver(hamilton, 5000, 0.02, 0.3, 0.9);
+        solver = new MultiExecSolver<>(new HamiltonSolver(hamilton, 5000, 0.1, 0.3, 0.9), 4, 1000);
     }
 
     private HamiltonSolver.Hamilton readFromFile(File file) throws FileNotFoundException {
@@ -33,6 +35,7 @@ public class HamiltonWrapper {
     }
 
     public void solve() {
+        solver.initiate();
         solver.solve();
     }
 }

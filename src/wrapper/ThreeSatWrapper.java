@@ -1,5 +1,6 @@
 package wrapper;
 
+import core.Solver;
 import impl.ThreeSatSolver;
 
 import java.io.File;
@@ -16,7 +17,7 @@ import java.util.stream.IntStream;
 public class ThreeSatWrapper {
 
     private final int HOW_MANY_SAT = 3;
-    private ThreeSatSolver solver;
+    private Solver solver;
 
     public ThreeSatWrapper(File file) throws FileNotFoundException {
         ThreeSatSolver.ThreeSat threeSat = readFromFile(file);
@@ -40,6 +41,7 @@ public class ThreeSatWrapper {
     }
 
     public void solve() {
+        solver.initiate();
         solver.solve();
     }
 }
