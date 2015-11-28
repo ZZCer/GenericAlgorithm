@@ -1,5 +1,6 @@
 package wrapper;
 
+import core.GenericSolver;
 import core.MultiExecSolver;
 import core.Solver;
 import impl.HamiltonSolver;
@@ -18,10 +19,10 @@ public class HamiltonWrapper {
 
     public HamiltonWrapper(File file) throws FileNotFoundException {
         HamiltonSolver.Hamilton hamilton = readFromFile(file);
-        solver = new MultiExecSolver<>(new HamiltonSolver(hamilton, 5000, 0.1, 0.3, 0.9), 4, 1000);
+        solver = new MultiExecSolver<>(new HamiltonSolver(hamilton, 5000, 0.1, 0.3, 0.9), 4, 100);
     }
 
-    private HamiltonSolver.Hamilton readFromFile(File file) throws FileNotFoundException {
+    public static HamiltonSolver.Hamilton readFromFile(File file) throws FileNotFoundException {
         Scanner scanner = new Scanner(file);
         int totalCities = scanner.nextInt();
         HamiltonSolver.Hamilton hamilton = new HamiltonSolver.Hamilton(0, totalCities, true);
@@ -34,8 +35,8 @@ public class HamiltonWrapper {
         return hamilton;
     }
 
-    public void solve() {
+    public GenericSolver.Candidate solve() {
         solver.initiate();
-        solver.solve();
+        return solver.solve();
     }
 }

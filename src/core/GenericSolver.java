@@ -65,19 +65,21 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
         return list;
     }
 
-    Candidate solveUntil(int generation) {
+    @Override
+    public Candidate solveUntil(int generation) {
         Candidate candidate = null;
         int gen = 0;
         while (!canTerminate() && gen < generation) {
             evolve();
             candidate = getBestCandidate();
-            System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
+            // System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
+            System.out.println(candidate.getFitness());
         }
         return candidate;
     }
 
-    public void solve() {
-        solveUntil(Integer.MAX_VALUE);
+    public Candidate solve() {
+        return solveUntil(Integer.MAX_VALUE);
     }
 
     protected Candidate getBestCandidate() {

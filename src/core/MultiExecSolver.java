@@ -1,5 +1,7 @@
 package core;
 
+import com.sun.javafx.image.IntPixelGetter;
+
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -37,7 +39,12 @@ public class MultiExecSolver<T> implements Solver {
     }
 
     @Override
-    public void solve() {
+    public GenericSolver.Candidate solve() {
+        return solveUntil(Integer.MAX_VALUE);
+    }
+
+    @Override
+    public GenericSolver.Candidate solveUntil(int generation) {
         List<GenericSolver<T>.Candidate> candidates = new ArrayList<>();
         solverPool.parallelStream().map(s -> {
             s.initiate();
@@ -45,7 +52,7 @@ public class MultiExecSolver<T> implements Solver {
             return s.getCandidatesSorted().subList(0, s.candidatesSize / solverPool.size());
         }).forEach(candidates::addAll);
         mainSolver.setCandidates(candidates);
-        mainSolver.solve();
+        return mainSolver.solveUntil(generation);
     }
 
 }

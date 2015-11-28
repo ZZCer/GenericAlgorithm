@@ -7,6 +7,9 @@ package core;
 public interface Solver {
 
     void initiate();
-    void solve();
+
+    GenericSolver.Candidate solve();
+
+    GenericSolver.Candidate solveUntil(int generation);
 
 }

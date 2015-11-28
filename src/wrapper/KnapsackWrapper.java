@@ -1,5 +1,6 @@
 package wrapper;
 
+import core.GenericSolver;
 import core.MultiExecSolver;
 import core.Solver;
 import impl.KnapsackSolver;
@@ -22,7 +23,7 @@ public class KnapsackWrapper {
         solver = new MultiExecSolver<>(new KnapsackSolver(knapsack, 5000, knapsack.getObjectCount(), 0.1, 0.3, 0.9), 4, 200);
     }
 
-    private KnapsackSolver.Knapsack readFromFile(File file) throws IOException {
+    public static KnapsackSolver.Knapsack readFromFile(File file) throws IOException {
         Scanner scanner = new Scanner(file);
         double maxWeight = scanner.nextDouble();
         int objCount = scanner.nextInt();
@@ -31,8 +32,8 @@ public class KnapsackWrapper {
         return knapsack;
     }
 
-    public void solve() {
+    public GenericSolver.Candidate solve() {
         solver.initiate();
-        solver.solve();
+        return solver.solve();
     }
 }
