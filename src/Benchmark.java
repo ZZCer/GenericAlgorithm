@@ -1,5 +1,6 @@
 import impl.HamiltonSolver;
 import impl.ThreeSatSolver;
+import wrapper.HamiltonWrapper;
 import wrapper.ThreeSatWrapper;
 
 import java.io.File;
@@ -12,12 +13,14 @@ import java.io.FileNotFoundException;
 public class Benchmark {
 
     public static void main(String[] args) throws FileNotFoundException {
-        ThreeSatSolver.ThreeSat threeSat = ThreeSatWrapper.readFromFile(new File("3sat_input.txt"));
+        // ThreeSatSolver.ThreeSat threeSat = ThreeSatWrapper.readFromFile(new File("3sat_input.txt"));
+        HamiltonSolver.Hamilton hamilton = HamiltonWrapper.readFromFile(new File("travel_input.txt"));
         int candidateSize, generationLimit;
         double mutationChance, crossoverChance;
-        for (mutationChance = 0; mutationChance < 1; mutationChance += 0.1) {
-            System.out.println("mutation chance = " + mutationChance);
-            test3Sat(threeSat, 5000, 100, mutationChance, 0.8);
+        int[] sizes = {10, 50, 100, 500, 1000, 2000, 3000, 5000, 10000};
+        for (int size : sizes) {
+            System.out.println("size = " + size);
+            testHamilton(hamilton, size, 200, 0.2, 0.8);
         }
 
     }

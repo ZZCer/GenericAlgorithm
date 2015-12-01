@@ -2,6 +2,7 @@ package core;
 
 import java.util.ArrayList;
 import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.IntStream;
 
@@ -31,10 +32,10 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     }
 
     @Override
-    public GenericSolver<T> clone() throws CloneNotSupportedException {
+    public GenericSolver clone() throws CloneNotSupportedException {
         Object solver = super.clone();
         if (solver instanceof GenericSolver) {
-            return (GenericSolver<T>) solver;
+            return (GenericSolver) solver;
         }
         return null;
     }
@@ -72,8 +73,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
         while (!canTerminate() && gen < generation) {
             evolve();
             candidate = getBestCandidate();
-            // System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
-            System.out.println(candidate.getFitness());
+            System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
         }
         return candidate;
     }
@@ -136,7 +136,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     protected List<Candidate> eliteSelect(List<Candidate> nextGeneration) {
         List<Candidate> tmpList = new ArrayList<>(nextGeneration);
-        Collections.sort(tmpList, (a, b) -> (int) (b.getFitness() - a.getFitness()));
+        Collections.sort(tmpList, Comparator.reverseOrder());
         List<Candidate> elite = new ArrayList<>();
         IntStream.range(0, (int) (candidatesSize * eliteLimit)).forEach(i -> {
             Candidate candidate = new Candidate(tmpList.get(i));
@@ -146,7 +146,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     }
 
     protected void addElite(List<Candidate> newGeneration, List<Candidate> elite) {
-        Collections.sort(newGeneration, (a, b) -> (int) (a.getFitness() - b.getFitness()));
+        Collections.sort(newGeneration);
         IntStream.range(0, (int) (candidatesSize * eliteLimit)).forEach(i -> newGeneration.set(i, elite.get(i)));
         Collections.shuffle(newGeneration);
     }
@@ -181,7 +181,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     }
 
 
-    public class Candidate extends ArrayList<T> {
+    public class Candidate extends ArrayList<T> implements Comparable<Candidate> {
 
         private double fitness;
 
@@ -201,6 +201,30 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
         public double getFitness() {
             return fitness;
         }
+
+        @Override
+        public String toString() {
+            String result = "";
+            for (T t : this) {
+                result += t + "\r\n";
+            }
+            result += Math.abs(fitness);
+            return result;
+        }
+
+        @Override
+        public int compareTo(Candidate o) {
+            return compareDouble(this.fitness, o.fitness);
+        }
+
+        private int compareDouble(double a, double b) {
+            if (a == b) {
+                return 0;
+            } else {
+                return a > b ? 1 : -1;
+            }
+        }
+
     }
 
 }

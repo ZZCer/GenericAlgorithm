@@ -20,7 +20,7 @@ public class KnapsackWrapper {
 
     public KnapsackWrapper(File file) throws IOException {
         KnapsackSolver.Knapsack knapsack = readFromFile(file);
-        solver = new MultiExecSolver<>(new KnapsackSolver(knapsack, 5000, knapsack.getObjectCount(), 0.1, 0.3, 0.9), 4, 200);
+        solver = new MultiExecSolver(new KnapsackSolver(knapsack, 5000, knapsack.getObjectCount(), 0.1, 0.3, 0.9), 4, 200);
     }
 
     public static KnapsackSolver.Knapsack readFromFile(File file) throws IOException {

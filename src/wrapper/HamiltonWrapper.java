@@ -19,7 +19,7 @@ public class HamiltonWrapper {
 
     public HamiltonWrapper(File file) throws FileNotFoundException {
         HamiltonSolver.Hamilton hamilton = readFromFile(file);
-        solver = new MultiExecSolver<>(new HamiltonSolver(hamilton, 5000, 0.1, 0.3, 0.9), 4, 100);
+        solver = new MultiExecSolver(new HamiltonSolver(hamilton, 5000, 0.2, 0.4, 0.9), 20, 70);
     }
 
     public static HamiltonSolver.Hamilton readFromFile(File file) throws FileNotFoundException {

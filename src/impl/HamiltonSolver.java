@@ -4,6 +4,7 @@ import core.GenericSolver;
 
 import java.util.Collections;
 import java.util.List;
+import java.util.Random;
 import java.util.stream.IntStream;
 
 /**
@@ -11,10 +12,6 @@ import java.util.stream.IntStream;
  * Created by guoli on 2015/11/21.
  */
 public class HamiltonSolver extends GenericSolver<Integer> {
-
-    static {
-        System.setProperty("java.util.Arrays.useLegacyMergeSort", "true");
-    }
 
     private Hamilton hamilton;
 
@@ -74,10 +71,9 @@ public class HamiltonSolver extends GenericSolver<Integer> {
 
     @Override
     protected void randomFlip(Candidate a) {
-        int flipIndexA = (int) (Math.random() * a.size());
-        int flipIndexB = (int) (Math.random() * a.size());
-        flipIndexA = flipIndexA == 0 ? 1 : flipIndexA;
-        flipIndexB = flipIndexB == 0 ? 1 : flipIndexB;
+        Random random = new Random();
+        int flipIndexA = random.nextInt(a.size() - 1) + 1;
+        int flipIndexB = random.nextInt(a.size() - 1) + 1;
         Collections.swap(a, flipIndexA, flipIndexB);
         a.refreshFitness();
     }
@@ -124,8 +120,13 @@ public class HamiltonSolver extends GenericSolver<Integer> {
         }
 
         public double fitness(Candidate candidate) {
-            return -IntStream.range(0, TOTAL_VERTEXES - 1)
-                    .mapToDouble(i -> getPath(candidate.get(i), candidate.get(i + 1)))
+            return -IntStream.range(0, TOTAL_VERTEXES)
+                    .mapToDouble(i -> {
+                        if (i == TOTAL_VERTEXES - 1) {
+                            return getPath(candidate.get(i), candidate.get(0));
+                        }
+                        return getPath(candidate.get(i), candidate.get(i + 1));
+                    })
                     .sum();
         }
     }

@@ -1,7 +1,5 @@
 package core;
 
-import com.sun.javafx.image.IntPixelGetter;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
@@ -12,15 +10,15 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/22.
  */
-public class MultiExecSolver<T> implements Solver {
+public class MultiExecSolver implements Solver {
 
-    private GenericSolver<T> mainSolver;
+    private GenericSolver mainSolver;
 
-    private Set<GenericSolver<T>> solverPool;
+    private Set<GenericSolver> solverPool;
     private int mergePoint;
     private int poolSize;
 
-    public MultiExecSolver(GenericSolver<T> genericSolver, int poolSize, int mergePoint) {
+    public MultiExecSolver(GenericSolver genericSolver, int poolSize, int mergePoint) {
         this.mainSolver = genericSolver;
         this.mergePoint = mergePoint;
         this.solverPool = new HashSet<>(poolSize);
@@ -45,7 +43,7 @@ public class MultiExecSolver<T> implements Solver {
 
     @Override
     public GenericSolver.Candidate solveUntil(int generation) {
-        List<GenericSolver<T>.Candidate> candidates = new ArrayList<>();
+        List<GenericSolver.Candidate> candidates = new ArrayList<>();
         solverPool.parallelStream().map(s -> {
             s.initiate();
             s.solveUntil(mergePoint);
