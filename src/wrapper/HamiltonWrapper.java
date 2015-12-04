@@ -4,6 +4,7 @@ import core.GenericSolver;
 import core.MultiExecSolver;
 import core.Solver;
 import impl.HamiltonSolver;
+import ui.StopButtonFrame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -19,7 +20,9 @@ public class HamiltonWrapper {
 
     public HamiltonWrapper(File file) throws FileNotFoundException {
         HamiltonSolver.Hamilton hamilton = readFromFile(file);
-        solver = new MultiExecSolver(new HamiltonSolver(hamilton, 5000, 0.2, 0.4, 0.9), 20, 70);
+        HamiltonSolver mainSolver = new HamiltonSolver(hamilton, 4000, 0.3, 0.3, 0.9);
+        solver = new MultiExecSolver(mainSolver, 4, 200);
+        new StopButtonFrame(mainSolver);
     }
 
     public static HamiltonSolver.Hamilton readFromFile(File file) throws FileNotFoundException {

@@ -65,7 +65,7 @@ public class HamiltonSolver extends GenericSolver<Integer> {
             used[last] = true;
             newCandidate.add(last);
         }
-        newCandidate.refreshFitness();
+        refreshFitness(newCandidate);
         return Collections.singletonList(newCandidate);
     }
 
@@ -75,7 +75,7 @@ public class HamiltonSolver extends GenericSolver<Integer> {
         int flipIndexA = random.nextInt(a.size() - 1) + 1;
         int flipIndexB = random.nextInt(a.size() - 1) + 1;
         Collections.swap(a, flipIndexA, flipIndexB);
-        a.refreshFitness();
+        refreshFitness(a);
     }
 
     @Override
@@ -89,7 +89,7 @@ public class HamiltonSolver extends GenericSolver<Integer> {
         IntStream.range(hamilton.START_INDEX + 1, hamilton.TOTAL_VERTEXES + hamilton.START_INDEX).forEach(candidate::add);
         Collections.shuffle(candidate);
         candidate.add(0, hamilton.START_INDEX);
-        candidate.refreshFitness();
+        refreshFitness(candidate);
         return candidate;
     }
 

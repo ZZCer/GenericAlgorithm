@@ -4,6 +4,7 @@ import core.GenericSolver;
 import core.MultiExecSolver;
 import core.Solver;
 import impl.KnapsackSolver;
+import ui.StopButtonFrame;
 
 import java.io.File;
 import java.io.IOException;
@@ -20,7 +21,9 @@ public class KnapsackWrapper {
 
     public KnapsackWrapper(File file) throws IOException {
         KnapsackSolver.Knapsack knapsack = readFromFile(file);
-        solver = new MultiExecSolver(new KnapsackSolver(knapsack, 5000, knapsack.getObjectCount(), 0.1, 0.3, 0.9), 4, 200);
+        KnapsackSolver mainSolver = new KnapsackSolver(knapsack, 5000, knapsack.getObjectCount(), 0.1, 0.2, 0.9);
+        solver = new MultiExecSolver(mainSolver, 4, 200);
+        new StopButtonFrame(mainSolver);
     }
 
     public static KnapsackSolver.Knapsack readFromFile(File file) throws IOException {

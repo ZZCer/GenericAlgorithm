@@ -20,6 +20,8 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     protected double mutationChance;
     protected double crossoverChance;
 
+    private transient boolean stopFlag;
+
     private List<Candidate> candidates;
 
     protected GenericSolver(int candidatesSize, int candidateLength, int crossoverLimit, double eliteLimit, double mutationChance, double crossoverChance) {
@@ -50,10 +52,18 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     protected abstract Candidate randomValidCandidate();
 
+    public void setStopFlag(boolean flag) {
+        this.stopFlag = flag;
+    }
+
     protected List<Double> getCurrentFitness(List<Candidate> candidates) {
         List<Double> fitness = new ArrayList<>();
         candidates.forEach(e -> fitness.add(e.getFitness()));
         return fitness;
+    }
+
+    public void refreshFitness(Candidate candidate) {
+        candidate.setFitness(this.getFitness(candidate));
     }
 
     void setCandidates(List<Candidate> candidates) {
@@ -62,7 +72,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     List<Candidate> getCandidatesSorted() {
         List<Candidate> list = new ArrayList<>(candidates);
-        Collections.sort(list, (a, b) -> (int) (b.getFitness() - a.getFitness()));
+        Collections.sort(list, Comparator.reverseOrder());
         return list;
     }
 
@@ -70,7 +80,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     public Candidate solveUntil(int generation) {
         Candidate candidate = null;
         int gen = 0;
-        while (!canTerminate() && gen < generation) {
+        while (!canTerminate() && gen < generation && !stopFlag) {
             evolve();
             candidate = getBestCandidate();
             System.out.println("[" + Thread.currentThread().getId() + "] \t" + ++gen + "\t " + candidate.getFitness());
@@ -194,12 +204,12 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
             this.fitness = candidate.fitness;
         }
 
-        public void refreshFitness() {
-            fitness = GenericSolver.this.getFitness(this);
-        }
-
         public double getFitness() {
             return fitness;
+        }
+
+        void setFitness(double fitness) {
+            this.fitness = fitness;
         }
 
         @Override
@@ -214,17 +224,8 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
         @Override
         public int compareTo(Candidate o) {
-            return compareDouble(this.fitness, o.fitness);
+            return Double.compare(this.fitness, o.fitness);
         }
-
-        private int compareDouble(double a, double b) {
-            if (a == b) {
-                return 0;
-            } else {
-                return a > b ? 1 : -1;
-            }
-        }
-
     }
 
 }

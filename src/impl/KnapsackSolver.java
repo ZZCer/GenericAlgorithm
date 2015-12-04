@@ -44,8 +44,8 @@ public class KnapsackSolver extends GenericSolver<Boolean> {
                     newB.set(i, s);
                 });
         if (validCandidate(newA) && validCandidate(newB)) {
-            newA.refreshFitness();
-            newB.refreshFitness();
+            refreshFitness(newA);
+            refreshFitness(newB);
             return Arrays.asList(newA, newB);
         } else {
             return null;
@@ -58,7 +58,7 @@ public class KnapsackSolver extends GenericSolver<Boolean> {
             int flipIndex = (int) (Math.random() * a.size());
             a.set(flipIndex, !a.get(flipIndex));
             if (validCandidate(a)) {
-                a.refreshFitness();
+                refreshFitness(a);
                 break;
             } else {
                 a.set(flipIndex, !a.get(flipIndex));
@@ -78,7 +78,7 @@ public class KnapsackSolver extends GenericSolver<Boolean> {
             Candidate candidate = new Candidate();
             IntStream.range(0, candidateLength).forEach(i -> candidate.add(i, random.nextBoolean()));
             if (validCandidate(candidate)) {
-                candidate.refreshFitness();
+                refreshFitness(candidate);
                 return candidate;
             }
         }

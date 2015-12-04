@@ -3,6 +3,7 @@ package wrapper;
 import core.GenericSolver;
 import core.Solver;
 import impl.ThreeSatSolver;
+import ui.StopButtonFrame;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -22,7 +23,8 @@ public class ThreeSatWrapper {
 
     public ThreeSatWrapper(File file) throws FileNotFoundException {
         ThreeSatSolver.ThreeSat threeSat = readFromFile(file);
-        solver = new ThreeSatSolver(threeSat, 5000, 0.1, 0.1, 0.8);
+        solver = new ThreeSatSolver(threeSat, 2000, 0.1, 0.3, 0.9);
+        new StopButtonFrame((GenericSolver) solver);
     }
 
     public static ThreeSatSolver.ThreeSat readFromFile(File file) throws FileNotFoundException {

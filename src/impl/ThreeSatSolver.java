@@ -35,8 +35,8 @@ public class ThreeSatSolver extends GenericSolver<Boolean> {
                     newA.set(i, b.get(i));
                     newB.set(i, s);
                 });
-        newA.refreshFitness();
-        newB.refreshFitness();
+        refreshFitness(newA);
+        refreshFitness(newB);
         return Arrays.asList(newA, newB);
     }
 
@@ -44,7 +44,7 @@ public class ThreeSatSolver extends GenericSolver<Boolean> {
     protected void randomFlip(Candidate a) {
         int flipIndex = (int) (Math.random() * a.size());
         a.set(flipIndex, !a.get(flipIndex));
-        a.refreshFitness();
+        refreshFitness(a);
     }
 
     @Override
@@ -57,7 +57,7 @@ public class ThreeSatSolver extends GenericSolver<Boolean> {
         Random random = new Random();
         Candidate candidate = new Candidate();
         IntStream.range(0, candidateLength).forEach(i -> candidate.add(i, random.nextBoolean()));
-        candidate.refreshFitness();
+        refreshFitness(candidate);
         return candidate;
     }
 
