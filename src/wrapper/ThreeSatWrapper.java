@@ -1,6 +1,6 @@
 package wrapper;
 
-import core.GenericSolver;
+import core.GeneticSolver;
 import core.Solver;
 import impl.ThreeSatSolver;
 import ui.StopButtonFrame;
@@ -24,7 +24,7 @@ public class ThreeSatWrapper {
     public ThreeSatWrapper(File file) throws FileNotFoundException {
         ThreeSatSolver.ThreeSat threeSat = readFromFile(file);
         solver = new ThreeSatSolver(threeSat, 2000, 0.1, 0.3, 0.9);
-        new StopButtonFrame((GenericSolver) solver);
+        new StopButtonFrame((GeneticSolver) solver);
     }
 
     public static ThreeSatSolver.ThreeSat readFromFile(File file) throws FileNotFoundException {
@@ -43,7 +43,7 @@ public class ThreeSatWrapper {
         return threeSat;
     }
 
-    public GenericSolver.Candidate solve() {
+    public GeneticSolver.Candidate solve() {
         solver.initiate();
         return solver.solve();
     }

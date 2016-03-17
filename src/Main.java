@@ -1,7 +1,5 @@
-import core.GenericSolver;
+import core.GeneticSolver;
 import wrapper.HamiltonWrapper;
-import wrapper.KnapsackWrapper;
-import wrapper.ThreeSatWrapper;
 
 import java.io.File;
 import java.io.FileWriter;
@@ -14,7 +12,7 @@ public class Main {
         // ThreeSatWrapper wrapper = new ThreeSatWrapper(new File("data/SAT3/SAT3_2.txt"));
         HamiltonWrapper wrapper = new HamiltonWrapper(new File("data/TSP/TSP_2.txt"));
 
-        GenericSolver.Candidate result = wrapper.solve();
+        GeneticSolver.Candidate result = wrapper.solve();
         FileWriter writer = new FileWriter(new File("TSP_2.txt"));
         writer.write(result.toString());
         writer.flush();

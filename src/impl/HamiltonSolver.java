@@ -1,6 +1,6 @@
 package impl;
 
-import core.GenericSolver;
+import core.GeneticSolver;
 
 import java.util.Collections;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/21.
  */
-public class HamiltonSolver extends GenericSolver<Integer> {
+public class HamiltonSolver extends GeneticSolver<Integer> {
 
     private Hamilton hamilton;
 

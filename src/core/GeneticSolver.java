@@ -10,7 +10,7 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/15.
  */
-public abstract class GenericSolver<T> implements Solver, Cloneable {
+public abstract class GeneticSolver<T> implements Solver, Cloneable {
 
     protected final int candidatesSize;
     protected final int candidateLength;
@@ -24,7 +24,7 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
 
     private List<Candidate> candidates;
 
-    protected GenericSolver(int candidatesSize, int candidateLength, int crossoverLimit, double eliteLimit, double mutationChance, double crossoverChance) {
+    protected GeneticSolver(int candidatesSize, int candidateLength, int crossoverLimit, double eliteLimit, double mutationChance, double crossoverChance) {
         this.candidatesSize = candidatesSize;
         this.candidateLength = candidateLength;
         this.crossoverLimit = crossoverLimit;
@@ -34,10 +34,10 @@ public abstract class GenericSolver<T> implements Solver, Cloneable {
     }
 
     @Override
-    public GenericSolver clone() throws CloneNotSupportedException {
+    public GeneticSolver clone() throws CloneNotSupportedException {
         Object solver = super.clone();
-        if (solver instanceof GenericSolver) {
-            return (GenericSolver) solver;
+        if (solver instanceof GeneticSolver) {
+            return (GeneticSolver) solver;
         }
         return null;
     }

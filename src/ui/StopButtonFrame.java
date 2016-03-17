@@ -1,7 +1,6 @@
 package ui;
 
-import com.sun.scenario.effect.impl.sw.java.JSWBlend_COLOR_BURNPeer;
-import core.GenericSolver;
+import core.GeneticSolver;
 
 import javax.swing.*;
 
@@ -11,7 +10,7 @@ import javax.swing.*;
  */
 public class StopButtonFrame extends JFrame {
 
-    public StopButtonFrame(GenericSolver solver) {
+    public StopButtonFrame(GeneticSolver solver) {
         JButton button = new JButton("Stop!");
         button.addActionListener(e -> solver.setStopFlag(true));
         this.add(button);

@@ -12,14 +12,14 @@ import java.util.stream.IntStream;
  */
 public class MultiExecSolver implements Solver {
 
-    private GenericSolver mainSolver;
+    private GeneticSolver mainSolver;
 
-    private Set<GenericSolver> solverPool;
+    private Set<GeneticSolver> solverPool;
     private int mergePoint;
     private int poolSize;
 
-    public MultiExecSolver(GenericSolver genericSolver, int poolSize, int mergePoint) {
-        this.mainSolver = genericSolver;
+    public MultiExecSolver(GeneticSolver geneticSolver, int poolSize, int mergePoint) {
+        this.mainSolver = geneticSolver;
         this.mergePoint = mergePoint;
         this.solverPool = new HashSet<>(poolSize);
         this.poolSize = poolSize;
@@ -37,13 +37,13 @@ public class MultiExecSolver implements Solver {
     }
 
     @Override
-    public GenericSolver.Candidate solve() {
+    public GeneticSolver.Candidate solve() {
         return solveUntil(Integer.MAX_VALUE);
     }
 
     @Override
-    public GenericSolver.Candidate solveUntil(int generation) {
-        List<GenericSolver.Candidate> candidates = new ArrayList<>();
+    public GeneticSolver.Candidate solveUntil(int generation) {
+        List<GeneticSolver.Candidate> candidates = new ArrayList<>();
         solverPool.parallelStream().map(s -> {
             s.initiate();
             s.solveUntil(mergePoint);

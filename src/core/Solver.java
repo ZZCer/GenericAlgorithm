@@ -8,8 +8,8 @@ public interface Solver {
 
     void initiate();
 
-    GenericSolver.Candidate solve();
+    GeneticSolver.Candidate solve();
 
-    GenericSolver.Candidate solveUntil(int generation);
+    GeneticSolver.Candidate solveUntil(int generation);
 
 }

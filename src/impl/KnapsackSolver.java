@@ -1,6 +1,6 @@
 package impl;
 
-import core.GenericSolver;
+import core.GeneticSolver;
 import javafx.util.Pair;
 
 import java.util.ArrayList;
@@ -13,7 +13,7 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/16.
  */
-public class KnapsackSolver extends GenericSolver<Boolean> {
+public class KnapsackSolver extends GeneticSolver<Boolean> {
 
     private Knapsack knapsack;
 

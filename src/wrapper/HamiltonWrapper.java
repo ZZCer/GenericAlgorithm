@@ -1,6 +1,6 @@
 package wrapper;
 
-import core.GenericSolver;
+import core.GeneticSolver;
 import core.MultiExecSolver;
 import core.Solver;
 import impl.HamiltonSolver;
@@ -38,7 +38,7 @@ public class HamiltonWrapper {
         return hamilton;
     }
 
-    public GenericSolver.Candidate solve() {
+    public GeneticSolver.Candidate solve() {
         solver.initiate();
         return solver.solve();
     }

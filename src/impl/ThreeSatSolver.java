@@ -1,6 +1,6 @@
 package impl;
 
-import core.GenericSolver;
+import core.GeneticSolver;
 
 import java.util.*;
 import java.util.stream.IntStream;
@@ -9,7 +9,7 @@ import java.util.stream.IntStream;
  * Project: GenericAlgorithm
  * Created by guoli on 2015/11/21.
  */
-public class ThreeSatSolver extends GenericSolver<Boolean> {
+public class ThreeSatSolver extends GeneticSolver<Boolean> {
 
     private ThreeSat threeSat;
 
